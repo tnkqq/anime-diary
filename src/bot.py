@@ -1,19 +1,34 @@
-from aiogram import Bot, Dispatcher
-from config import config
+from aiogram import Bot, Dispatcher,types   
+from config import Config
 from services.api import AnimeApi
-
+from keyboards import inline_kb
+from handlers import text
+import logging
 import asyncio
-bot = Bot(token = config.token)
+
+#logs
+logging.basicConfig(level=logging.INFO)
+
+#bot object
+bot = Bot(token = Config.BOT_TOKEN)
+
+#dispatcher object
 dp = Dispatcher (bot = bot)
 
-async def main():
-    from handlers import dp
-    try:
-        await dp.start_polling()
 
+async def main():
+    try:
+        from handlers import dp
+        await bot.delete_webhook(drop_pending_updates=True)
+
+        @dp.message_handler(commands=("start"))
+        async def cmd_strt(message : types.Message):    
+            image = types.InputFile.from_url(text.hello_img)
+            await bot.send_photo(message.chat.id,photo=image,caption=(text.start) ,reply_markup=inline_kb.menu_button) 
+        import handlers.message_handlers
+        await dp.start_polling(bot)
     finally: 
         await bot.session.close()
-
 
 if __name__ == "__main__":
     try:
