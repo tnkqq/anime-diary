@@ -1,11 +1,13 @@
+import psycopg2
+from AiogramStorages.storages import PGStorage
 
-class DataBase:
 
 
-    def __init__(self,connect):
-        self.connect = connect 
+# class DataBase:
+#     def __init__(self,connect):
+#         self.connect = connect 
+#         self.cursor = self.connect.cursor
 
-    async def ad_users(self,user_id):
-        with self.connect:
-            return self.cursor.execute("""INSERT INTO  users (user_id,name)""") 
-    
+#     async def add_users(self,user_id):
+#         with self.connect:
+#             pass
