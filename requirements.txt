@@ -1,6 +1,6 @@
-psycopg2 == 2.8.6
 requests 
-aiogram
+aiogram == 2.25.1
+redis == 5.0.1
 fake_useragent
-asyncpg
+httpx
 AiogramStorages

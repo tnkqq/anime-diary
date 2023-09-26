@@ -5,16 +5,25 @@ from keyboards import inline_kb
 from handlers import text
 import logging
 import asyncio
-from aiogram.contrib.fsm_storage.memory import MemoryStorage
+from aiogram.contrib.fsm_storage.redis import RedisStorage2
+# from aiogram.contrib.fsm_storage.memory import MemoryStorage
 
 
+from aiogram.contrib.fsm_storage import memory
 #logs
+
 logging.basicConfig(level=logging.INFO)
 
 #bot object
 bot = Bot(token = Config.BOT_TOKEN)
 
-storage = MemoryStorage()
+#storages 
+
+# storage = MemoryStorage()
+
+storage = RedisStorage2('localhost', 6379, db=5,pool_size=10,prefix='my_fsm_key')
+
+
 
 #dispatcher object
 dp = Dispatcher (bot = bot,storage=storage)
@@ -34,6 +43,7 @@ async def main():
         await dp.start_polling(bot)
         await dp.skip_updates()
     finally: 
+        await dp.storage.close()
         await bot.session.close()
 
 if __name__ == "__main__":
