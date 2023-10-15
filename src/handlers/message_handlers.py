@@ -1,5 +1,6 @@
 import asyncio
-from . import dp, bot
+from aiogram import Dispatcher
+from . import bot,storage
 import traceback
 from services.api import AnimeApi
 from aiogram import types
@@ -10,7 +11,7 @@ from aiogram.dispatcher.filters.state import StatesGroup,State
 
 from keyboards import inline_kb 
 
-
+dp_msg = Dispatcher(bot = bot,storage=storage)
 
 
 class UserStates(StatesGroup):
@@ -27,7 +28,7 @@ def create_message(anime_data):
     return msg,poster
 
 
-@dp.message_handler(state = UserStates.WaitigForSearch)
+@dp_msg.message_handler(state = UserStates.WaitigForSearch)
 async def anime_by_title(message :types.Message, state : FSMContext):
     print("in message")
     anime_title = message.text
@@ -45,4 +46,8 @@ async def anime_by_title(message :types.Message, state : FSMContext):
     
     await state.finish()
 
-
+# @dp.message_handler(state=UserStates.WaitingForRate)
+# async def rate_anime(message : types.Message,state : FSMContext):
+#     await bot.delete_message(chat_id=message.chat.id,message_id=message.message_id)
+#     message_id_to_edit = (await state.get_data())['MESSAGE_TO_EDIT']
+#     await bot.edit_message_caption(chat_id=message.chat.id,message_id=message_id_to_edit)
