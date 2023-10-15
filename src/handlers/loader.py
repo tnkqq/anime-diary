@@ -1,3 +1,3 @@
-from bot import dp, bot
+from bot import dp,bot,storage
 
 
